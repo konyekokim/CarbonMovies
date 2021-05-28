@@ -48,21 +48,21 @@ jobs:
           path: lib/commons/build/reports
       - store_test_results:
           path: lib/commons/build/test-results
-       - run:
+      - run:
           name: Run navigation Module Unit Tests
           command: ./gradlew :data:testDebugUnitTest
       - store_artifacts:
           path: lib/navigation/build/reports
       - store_test_results:
           path: lib/navigation/build/test-results
-       - run:
+      - run:
           name: Run resources Module Unit Tests
           command: ./gradlew :data:testDebugUnitTest
       - store_artifacts:
           path: lib/resources/build/reports
       - store_test_results:
           path: lib/resources/build/test-results
-       - run:
+      - run:
           name: Run testcommons Module Unit Tests
           command: ./gradlew :data:testDebugUnitTest
       - store_artifacts:
