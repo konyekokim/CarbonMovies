@@ -1,9 +1,9 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/code
+    working_directory: ~/Carbon-Movies
     docker:
-      - image: circleci/android:api-25-alpha
+      - image: circleci/android:api-30-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -11,7 +11,7 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
 #      - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this. 
+#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
 #         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
@@ -21,10 +21,56 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
-          name: Run Tests
-          command: ./gradlew lint test
+          name: Run app Module Unit Tests
+          command: ./gradlew :presentation:testDebugUnitTest
       - store_artifacts:
           path: app/build/reports
-          destination: reports
       - store_test_results:
           path: app/build/test-results
+      - run:
+          name: Run movies Module Unit Tests
+          command: ./gradlew :domain:test
+      - store_artifacts:
+          path: feature/movies/build/reports
+      - store_test_results:
+          path: feature/movies/build/test-results
+      - run:
+          name: Run movie detail Module Unit Tests
+          command: ./gradlew :domain:test
+      - store_artifacts:
+          path: feature/moviedetail/build/reports
+      - store_test_results:
+          path: feature/moviedetail/build/test-results
+      - run:
+          name: Run commons Module Unit Tests
+          command: ./gradlew :data:testDebugUnitTest
+      - store_artifacts:
+          path: lib/commons/build/reports
+      - store_test_results:
+          path: lib/commons/build/test-results
+       - run:
+          name: Run navigation Module Unit Tests
+          command: ./gradlew :data:testDebugUnitTest
+      - store_artifacts:
+          path: lib/navigation/build/reports
+      - store_test_results:
+          path: lib/navigation/build/test-results
+       - run:
+          name: Run resources Module Unit Tests
+          command: ./gradlew :data:testDebugUnitTest
+      - store_artifacts:
+          path: lib/resources/build/reports
+      - store_test_results:
+          path: lib/resources/build/test-results
+       - run:
+          name: Run testcommons Module Unit Tests
+          command: ./gradlew :data:testDebugUnitTest
+      - store_artifacts:
+          path: lib/testcommons/build/reports
+      - store_test_results:
+          path: lib/testcommons/build/test-results
+      - run:
+          name: Run Lint Test
+          command: ./gradlew lint
+      - store_artifacts:
+          path: app/build/reports
