@@ -1,6 +1,6 @@
 # CarbonMovies
 Some of the Libraries used to acheive this include:
-Moshi
+/nMoshi
 Retrofit
 OkHttp
 Coroutines
